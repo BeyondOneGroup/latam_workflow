@@ -19,9 +19,15 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm run test -- --ci --runInBand --coverage
-      - name: Set AWS Region
-        run: echo "AWS_REGION=us-east-1"
-      - run: sam validate
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ inputs.aws-role-arn }}
+          aws-region: ${{ inputs.region }}
+
+      # ✅ Validar plantilla SAM (ahora sí con credenciales y región disponibles)
+      - name: Validate SAM template
+        run: sam validate --region ${{ inputs.region }}
       - uses: actions/upload-artifact@v4
         with: { name: dist, path: . }
   deploy:
