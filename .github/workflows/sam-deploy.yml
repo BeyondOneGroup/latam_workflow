@@ -1,4 +1,3 @@
-# .github/workflows/sam-deploy.yml (reutilizable)
 name: Reusable SAM Deploy
 on:
   workflow_call:
